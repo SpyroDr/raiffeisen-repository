@@ -15,10 +15,12 @@ repositories {
 
 dependencies {
     testImplementation 'junit:junit:4.13.2'
-    
-    testImplementation 'org.seleniumhq.selenium:selenium-java:4.0.0'
+
+    testImplementation 'org.seleniumhq.selenium:selenium-api:3.14.0'
 
     testImplementation 'io.github.bonigarcia:webdrivermanager:4.4.3'
+
+    testImplementation 'com.codeborne:selenide:5.23.2'
 }
 
 test {

@@ -4,8 +4,10 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.firefox.FirefoxDriver;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
 
@@ -16,9 +18,10 @@ public class LoginTest {
 
     @Before
     public void start() {
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
-        wait = new WebDriverWait(driver, 10);
+        WebDriverManager.iedriver().setup();
+        //driver = new ChromeDriver();
+        driver = new InternetExplorerDriver();
+        wait = new WebDriverWait(driver, 20);
 
     }
 
