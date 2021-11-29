@@ -1,5 +1,6 @@
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -14,6 +15,9 @@ import org.openqa.selenium.support.ui.Select;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 
 public class task12 {
@@ -38,11 +42,17 @@ public class task12 {
         searchAndClick("ul#box-apps-menu li#app-", "Catalog");
         Thread.sleep(1000);
 
+        //count strawberry card before creation card
+        driver.get("http://localhost/litecart/admin/?app=catalog&doc=catalog&category_id=1");
+        List<WebElement> oldList = createList();
+        Thread.sleep(1000);
+
+
         //***************** button Add New Product *********************
         searchAndClick("td#content a.button", "Add New Product");
         Thread.sleep(1000);
 
-        String newItem = "White Pelican";
+        String newItem = "Red Strawberry";
 
         String relativePath = "./src/test/resources/strawberry.jpg";
         Path filePath = Paths.get(relativePath);
@@ -65,7 +75,13 @@ public class task12 {
         driver.findElement(By.cssSelector("button[name=save]")).click();
         Thread.sleep(1000);
 
-        checkNewItem(newItem);
+        //check count Strawberry card +1
+        //Assert.assertTrue(driver.findElement(By.linkText("Red Strawberry")).isDisplayed());
+        List<WebElement> newList = createList();
+        int count = oldList.size()+1;
+        assertThat("Quantity of Strawberry cards doesn't increase", newList.size() , is(count));
+        System.out.println("Quantity of Strawberry cards = " + count);
+
 
     }
 
@@ -106,19 +122,10 @@ public class task12 {
         driver.findElement(By.name("prices[USD]")).sendKeys("1");
     }
 
-    private void checkNewItem(String item) {
-        String res = "not";
-        String name;
+    public List<WebElement> createList() {
         WebElement root = driver.findElement(By.cssSelector("table.dataTable tbody"));
-        List<WebElement> list = root.findElements(By.xpath(".//tr/td[3]/a"));
-        for (WebElement we : list) {
-            name = we.getText();
-            if (name.equals(item) ) {
-                res = "successfully";
-                break;
-            }
-        }
-        System.out.println("New item " + item + " " + res + " added");
+        List<WebElement> list = root.findElements(By.linkText("Red Strawberry"));
+        return list;
     }
 
     private void searchAndClick(String linkList, String text) {
