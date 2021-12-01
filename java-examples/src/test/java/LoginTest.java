@@ -18,7 +18,7 @@ public class LoginTest {
 
     @Before
     public void start() {
-        WebDriverManager.iedriver().setup();
+        WebDriverManager.firefoxdriver().setup();
         //driver = new ChromeDriver();
         driver = new InternetExplorerDriver();
         wait = new WebDriverWait(driver, 20);

@@ -104,7 +104,7 @@ public class task10 {
         if (s1.equals(s2) )
             result += "the same.";
         else
-            result += "diferent.";
+            result += "different.";
         System.out.println(result);
     }
 

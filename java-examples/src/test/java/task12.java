@@ -11,6 +11,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import java.util.concurrent.TimeUnit;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -34,23 +36,21 @@ public class task12 {
     public void mainTest() throws InterruptedException {
         //***************** Login *********************
         driver.get("http://localhost/litecart/admin/");
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("username")));
         driver.findElement(By.name("username")).sendKeys("admin");
         driver.findElement(By.name("password")).sendKeys("admin");
         driver.findElement(By.name("login")).click();
 
         //***************** page Catalog *********************
         searchAndClick("ul#box-apps-menu li#app-", "Catalog");
-        Thread.sleep(1000);
 
         //count strawberry card before creation card
         driver.get("http://localhost/litecart/admin/?app=catalog&doc=catalog&category_id=1");
         List<WebElement> oldList = createList();
-        Thread.sleep(1000);
-
 
         //***************** button Add New Product *********************
         searchAndClick("td#content a.button", "Add New Product");
-        Thread.sleep(1000);
 
         String newItem = "Red Strawberry";
 
@@ -63,17 +63,16 @@ public class task12 {
 
         //******* filling Information
         searchAndClick("div.tabs li", "Information");
-        Thread.sleep(1000);
         fillTabInformation();
 
         //******** filling Prices
         searchAndClick("div.tabs li", "Prices");
-        Thread.sleep(1000);
         fillTabPrices();
 
         //Save
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("button[name=save]")));
         driver.findElement(By.cssSelector("button[name=save]")).click();
-        Thread.sleep(1000);
 
         //check count Strawberry card +1
         //Assert.assertTrue(driver.findElement(By.linkText("Red Strawberry")).isDisplayed());
@@ -86,6 +85,8 @@ public class task12 {
     }
 
     private void fillTabGeneral(String item, String path){
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("name[en]")));
         //Name
         driver.findElement(By.name("name[en]")).sendKeys(item);
         //Status
@@ -93,17 +94,22 @@ public class task12 {
         //Code
         driver.findElement(By.name("code")).sendKeys("rp001");
         //Categories
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[type=checkbox][value='0']")));
         driver.findElement(By.cssSelector("input[type=checkbox][value='0']")).click();
         driver.findElement(By.cssSelector("input[type=checkbox][value='1']")).click();
         //Quantity
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("quantity")));
         driver.findElement(By.name("quantity")).sendKeys(Keys.CONTROL + "a" + Keys.DELETE );
         driver.findElement(By.name("quantity")).sendKeys("50");
         //Upload file
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("new_images[]")));
         driver.findElement(By.name("new_images[]")).sendKeys(path);
     }
 
     private void fillTabInformation() {
         //Manufacrurer
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("manufacturer_id")));
         Select manufact = new Select(driver.findElement(By.name("manufacturer_id")));
         manufact.selectByVisibleText("ACME Corp.");
         //Short Description
@@ -114,6 +120,8 @@ public class task12 {
 
     private void fillTabPrices() {
         // Purchase Price
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("purchase_price")));
         driver.findElement(By.name("purchase_price")).sendKeys(Keys.CONTROL + "a" + Keys.DELETE );
         driver.findElement(By.name("purchase_price")).sendKeys("1");
         Select curr_code = new Select(driver.findElement(By.name("purchase_price_currency_code")));
@@ -123,12 +131,17 @@ public class task12 {
     }
 
     public List<WebElement> createList() {
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("table.dataTable tbody")));
         WebElement root = driver.findElement(By.cssSelector("table.dataTable tbody"));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.linkText("Red Strawberry")));
         List<WebElement> list = root.findElements(By.linkText("Red Strawberry"));
         return list;
     }
 
     private void searchAndClick(String linkList, String text) {
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(linkList)));
         List<WebElement> list = driver.findElements(By.cssSelector(linkList));
         String name;
         for (WebElement we : list) {
