@@ -13,6 +13,8 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.concurrent.TimeUnit;
 
+import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
+
 public class task13 {
     private WebDriver driver;
     private WebDriverWait wait;
@@ -23,6 +25,7 @@ public class task13 {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
         implicitlyWaitOn();
+
         wait = new WebDriverWait(driver, 10/*seconds*/);
     }
 
@@ -69,13 +72,16 @@ public class task13 {
         int count = driver.findElements(By.cssSelector("li.shortcut")).size();
         for (int i=count; i>1; i--) {
             driver.findElement(By.cssSelector("li.shortcut")).click();
+            wait.until(presenceOfElementLocated(By.name("remove_cart_item")));
             driver.findElement(By.name("remove_cart_item")).click();
             implicitlyWaitOff();
             wait.until(ExpectedConditions.numberOfElementsToBeLessThan(
                     By.cssSelector("table.dataTable td.item"), i));
             implicitlyWaitOn();
         }
+        wait.until(presenceOfElementLocated(By.name("remove_cart_item")));
         driver.findElement(By.name("remove_cart_item")).click();
+
         implicitlyWaitOff();
         wait.until(ExpectedConditions.stalenessOf(
                 driver.findElement(By.cssSelector("table.dataTable"))));
