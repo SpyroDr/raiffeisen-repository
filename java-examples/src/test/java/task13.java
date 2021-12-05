@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -83,8 +84,7 @@ public class task13 {
         driver.findElement(By.name("remove_cart_item")).click();
 
         implicitlyWaitOff();
-        wait.until(ExpectedConditions.stalenessOf(
-                driver.findElement(By.cssSelector("table.dataTable"))));
+        wait.until(presenceOfElementLocated(By.xpath(".//div[@id='checkout-cart-wrapper']//em[text()='There are no items in your cart.']")));
         implicitlyWaitOn();
     }
 
